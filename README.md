@@ -4,6 +4,12 @@
 * oracle livesql -https://livesql.oracle.com/
 * ask Tom - ask_tom.oracle
 
+## Objects name lengh
+Moving from the 30 char limit to 128 limit!
+but please keep them sort as possible.
+
+
+
 ## ACCESSIBLE BY Clause
 Doc: http://docs.oracle.com/database/122/LNPLS/ACCESSIBLE-BY-clause.htm
 https://oracle-base.com/articles/12c/plsql-white-lists-using-the-accessible-by-clause-12cr1
@@ -216,6 +222,75 @@ PKG1.PROC1.NESTED_IN_PROC1
 ## priveilages for progam units
 
 ## mark elemets for depracation
+http://stevenfeuersteinonplsql.blogspot.com/2016/10/122-helps-you-manage-persistent-code.html
+We can now use the DEPRECATE pragma to document that a program unit (e.g., package) or subprogram (e.g., procedure in a package) is deprecated and should not be used. 
+We can then take advantage of compile-time warnings to help identify all places that deprecated code is used.
+
+### Turn on Compile-Time Warnings
+
+ALTER SESSION SET plsql_warnings = 'enable:all'
+/
+
+CREATE OR REPLACE PACKAGE pkg 
+   AUTHID DEFINER 
+AS 
+   PRAGMA DEPRECATE(pkg); 
+ 
+   PROCEDURE proc; 
+   FUNCTION func RETURN NUMBER; 
+END;
+
+
+### Mark Entire Package as Deprecated
+
+CREATE OR REPLACE PACKAGE pkg 
+   AUTHID DEFINER 
+AS 
+   PRAGMA DEPRECATE(pkg); 
+ 
+   PROCEDURE proc; 
+   FUNCTION func RETURN NUMBER; 
+END;
+
+CREATE OR REPLACE PACKAGE BODY pkg
+AS
+   PROCEDURE proc
+   IS
+   BEGIN
+      DBMS_OUTPUT.put_line ('old stuff');
+   END;
+
+   FUNCTION func
+      RETURN NUMBER
+   IS
+   BEGIN
+      RETURN 1;
+   END;
+END;
+
+*Warning:* PACKAGE PKG
+Line: 4 PLW-06019: entity PKG is deprecated
+
+### Now let's change Warnings into Errors:
+
+ALTER SESSION SET plsql_warnings='ERROR:(6019,6020,6021,6022)'
+/
+
+CREATE OR REPLACE PACKAGE pkg 
+   AUTHID DEFINER 
+AS 
+   PRAGMA DEPRECATE(pkg); 
+ 
+   PROCEDURE proc; 
+   FUNCTION func RETURN NUMBER; 
+END;
+/
+
+*Errors:* PACKAGE PKG
+Line: 4 PLS-06019: entity PKG is deprecated
+
+
+
 
 ## plsql scope
 
@@ -372,6 +447,49 @@ IS
    c_max_length constant integer := 32767; 
    SUBTYPE maxvarchar2 IS VARCHAR2 (c_max_length); 
 END;   
+
+
+
+## Code Based Access Control (CBAC) : Granting Roles to PL/SQL Program Units
+https://oracle-base.com/articles/12c/code-based-access-control-12cr1#:~:text=Oracle%2012c%20introduced%20code%20based,objects%20directly%20to%20that%20user.
+By default, PL/SQL program units are created using definer rights.
+So they are executed with all the privileges granted directly to the user that created them. 
+This can be very useful when you want low privileged users to perform tasks that require a high level of privilege.
+ this is implemented by wrapping PL/SQL program unit, with execute privilege granted to the low privileged user. 
+ 
+ The problem with definer rights is it is very easy to accidentally expose excessive functionality to a user.
+
+An alternative is to create the program unit with invoker rights, so it is run in the context the calling user, rather than the user that created it.
+The advantage of this is the program unit is only able to perform tasks that the calling user has privilege to perform, including those privileges granted via roles.
+Invoker rights has a number of issues.
+ode based access control (CBAC), allowing roles to be granted directly to definer and invoker rights program units, thereby letting you to guarantee the level of privilege present in the calling user, without having to expose additional objects directly to that user. 
+
+## SQL/JSON Features in Database 12.2
+https://livesql.oracle.com/apex/livesql/file/tutorial_EDVE861H6UF4Z20EV0RM4DK2G.html
+
+### CLOB CHECK (PO_DOCUMENT IS JSON)
+Let's create table:
+
+create table J_PURCHASEORDER (
+  ID            RAW(16) NOT NULL,
+  DATE_LOADED   TIMESTAMP(6) WITH TIME ZONE,
+  PO_DOCUMENT CLOB CHECK (PO_DOCUMENT IS JSON)
+)
+
+
+### Accessing JSON using simplified syntax
+After loading JSON Documents into the database we can run thingfs like:
+
+select j.PO_DOCUMENT.CostCenter, count(*)
+  from J_PURCHASEORDER j
+ group by j.PO_DOCUMENT.CostCenter 
+ order by j.PO_DOCUMENT.CostCenter 
+
+### When to use?
+My recomandation is to use this only for relative temporaty stored data.
+JSON mainpulation and handling should run in the application layer IMHO.
+
+
 
 
 
