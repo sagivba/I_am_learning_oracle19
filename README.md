@@ -1,4 +1,3 @@
-# I_am_learning_oracle19
 ##  sources from the web:
 * oracle learning library - https://apexapps.oracle.com/pls/apex/f?p=44785:1:0
 * oracle.com/plsql
@@ -97,9 +96,122 @@ but that the latter has the advantage that it is modular, whereas the former is 
 We can therefore recommend that you first try to add ```PRAGMA UDF``` to your PL/SQL functions if and only if they are called from SQL statements but not PL/SQL code. 
 If that does not provide a significant benefit, then try the WITH function block.
 
-## UTL_CALL_STACK pacakge
+One thing to keep in mind: the performance of the UDF-ied function could actually degrade a bit when run natively in PL/SQL (outside of a SQL statement).
 
-## returrn resuilt set
+### PRAGMA UDF and WITH clause enhancements
+https://oracle-base.com/articles/12c/with-clause-enhancements-12cr1
+In a number of presentations prior to the official 12c release, speakers mentioned PRAGMA UDF (User Defined Function), which supposedly gives you the performance advantages of inline PL/SQL, whilst allowing you to define the PL/SQL object outside the SQL statement. The following code redefines the previous normal function to use this pragma.
+
+with 
+ function get_commision(insal in number) return number is 
+ begin
+ return insal*.10;
+ end;
+select empno,name,sal,get_commision(sal) commision from t2;
+/
+
+or just
+create or replace function get_commision(insal in number) return number is 
+Pragma UDF;
+begin
+ return insal*.10;
+end;
+/
+
+select empno,name,sal,get_commision(sal) commision from t2;
+
+
+
+## UTL_CALL_STACK pacakge
+UTL_CALL_STACK: Fine-grained execution call stack package
+Let's explored the different ways you can obtain the error message / stack in PL/SQL:
+
+### SQLERRM 
+The original, traditional and not currently recommended function to get the current error message. 
+It is not recommended because the next two options avoid a problem which you are unlikely to run into: 
+The error stack will be truncated at 512 bytes, and you might lose some error information.
+
+### DBMS_UTILITY
+Returns the error message / stack, and will not truncate your string like SQLERRM will.
+* DBMS_UTILITY.FORMAT_CALL_STACK - How did I get here
+* DBMS_UTILITY.FORMAT_ERROR_STACK - what is error message / stack - this one will not truncate your string like SQLERRM will.
+* MS_UTILITY.FORMAT_ERROR_BACKTRACE - On what line was the error raised
+
+### UTL_CALL_STACK API 
+https://livesql.oracle.com/apex/livesql/file/content_CTG44K8HGN960Z0TRIEUVXEQI.html
+Added in Oracle Database 12c, the UTL_CALL_STACK package offers a comprehensive API into the execution call stack, the error stack and the error backtrace. 
+
+
+CREATE OR REPLACE PACKAGE pkg1
+IS  
+   PROCEDURE proc1;  
+END pkg1; 
+/
+CREATE OR REPLACE PACKAGE BODY pkg1  
+IS  
+   PROCEDURE proc1  
+   IS  
+      PROCEDURE nested_in_proc1  
+      IS  
+      BEGIN  
+         DBMS_OUTPUT.put_line ( 
+            '*** "Traditional" Call Stack using FORMAT_CALL_STACK'); 
+ 
+         DBMS_OUTPUT.put_line (DBMS_UTILITY.format_call_stack); 
+  
+         DBMS_OUTPUT.put_line ( 
+            '*** Fully Qualified Nested Subprogram vis UTL_CALL_STACK');  
+ 
+         DBMS_OUTPUT.put_line (  
+            utl_call_stack.concatenate_subprogram (  
+               utl_call_stack.subprogram (1)));  
+      END;  
+   BEGIN  
+      nested_in_proc1;  
+   END;  
+END pkg1;
+/
+
+
+The FORMAT_CALL_STACK function in DBMS_UTILITY only shows you the name of the program unit in the call stack (i.e., the package name, *but not the function within the package*). 
+UTL_CALL_STACK only shows you the name of the package subprogram, but even the name of nested (local) subprograms within those. 
+
+BEGIN  
+   pkg1.proc1;  
+END; 
+
+Take a look in the firs output line: *NESTED_IN_PROC1*
+
+*** "Traditional" Call Stack using FORMAT_CALL_STACK
+----- PL/SQL Call Stack -----
+  object      line  frame       object
+  handle    number  size        name
+0x40706e6b8        11         416  package body SQL_RHMNFZMBVXMXUDWPPFNBLLUVE.PKG1.PROC1.NESTED_IN_PROC1
+0x40706e6b8        21          24  package body SQL_RHMNFZMBVXMXUDWPPFNBLLUVE.PKG1.PROC1
+0x20c994d60         2          24  anonymous block
+0x45612b8e0      1721          88  package body SYS.DBMS_SQL.EXECUTE
+0x465ed06e0      1365        4848  package body LIVESQL.ORACLE_SQL_EXEC.RUN_BLOCK
+0x465ed06e0      1459         960  package body LIVESQL.ORACLE_SQL_EXEC.RUN_SQL
+0x465ed06e0      1574         464  package body LIVESQL.ORACLE_SQL_EXEC.RUN_A_STATEMENT
+0x465ed06e0      1898        5008  package body LIVESQL.ORACLE_SQL_EXEC.RUN_STATEMENTS
+0x465ed06e0      2015        2528  package body LIVESQL.ORACLE_SQL_EXEC.RUN_STMTS
+0x46e789230      2512        3712  package body LIVESQL.ORACLE_SQL_SCHEMA.RUN_SAVED_SESSION
+0x45e286e48       341         112  package body LIVESQL.ORACLE_SQL_SCHEMA_PUB.RUN_SAVED_SESSION
+0x407bde178        22        1616  anonymous block
+0x45612b8e0      1721          88  package body SYS.DBMS_SQL.EXECUTE
+0x417207590      1880         936  package body APEX_050100.WWV_FLOW_DYNAMIC_EXEC.RUN_BLOCK5
+0x417207590       936         168  package body APEX_050100.WWV_FLOW_DYNAMIC_EXEC.EXECUTE_PLSQL_CODE
+0x4858d9a38        71         256  package body APEX_050100.WWV_FLOW_PROCESS_NATIVE.PLSQL
+0x4858d9a38      1132        4544  package body APEX_050100.WWV_FLOW_PROCESS_NATIVE.EXECUTE_PROCESS
+0x466594bf0      2399        2744  package body APEX_050100.WWV_FLOW_PLUGIN.EXECUTE_PROCESS
+0x46eabb2d0       200        2376  package body APEX_050100.WWV_FLOW_PROCESS.PERFORM_PROCESS
+0x46eabb2d0       443       11744  package body APEX_050100.WWV_FLOW_PROCESS.PERFORM
+0x4562256d0      4857          40  package body APEX_050100.WWV_FLOW.SHOW.RUN_BEFORE_HEADER_CODE
+0x
+*** Fully Qualified Nested Subprogram vis UTL_CALL_STACK
+PKG1.PROC1.NESTED_IN_PROC1
+
+
 
 ## priveilages for progam units
 
@@ -168,11 +280,11 @@ This can help to improve program clarity and developer productivity.
 A qualified expression combines expression elements to create values of a RECORD type or associative array type. 
 Qualified expressions use an explicit type indication to provide the type of the qualified item. 
 This explicit indication is known as a typemark.
+
 #### Before:
 DECLARE   
-   TYPE ints_t IS TABLE OF INTEGER   
-      INDEX BY PLS_INTEGER;   
-   
+   TYPE ints_t IS TABLE OF INTEGER INDEX BY PLS_INTEGER;   
+
    l_ints   ints_t;   
 BEGIN   
    l_ints (1) := 55;  
@@ -242,7 +354,25 @@ BEGIN
       l_index := l_stuff.NEXT (l_index); 
    END LOOP; 
 END;
- 
+
+
+## static expressions
+https://livesql.oracle.com/apex/livesql/file/content_EDX8UZPUE3RO12C4ETRA88I8X.html
+Doc: http://docs.oracle.com/database/122/LNPLS/plsql-language-fundamentals.htm#LNPLS300
+we can now use static expressions where previously only literal constants were allowed. 
+This will help us write code that adapts more easily and automatically to changes and is easier to maintain.
+
+The length must be computable at compile time (that's what it means to be a static expression). 
+But still we can reference a length defined elsewhere (and in one place). 
+WE can do this is a "regular" declaration and also in the definition of a subtype like so:
+
+CREATE OR REPLACE PACKAGE pkg 
+   AUTHID DEFINER 
+IS 
+   c_max_length constant integer := 32767; 
+   SUBTYPE maxvarchar2 IS VARCHAR2 (c_max_length); 
+END;   
+
 
 
 
