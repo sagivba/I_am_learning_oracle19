@@ -86,6 +86,16 @@ PLS-00904: insufficient privilege to access object PRIVATE_PROC
 ## new data types
 
 ## optiomizing function
+### UDF pragma 
+https://mwidlake.wordpress.com/2015/11/04/pragma-udf-speeding-up-your-plsql-functions-called-from-sql/
+The UDF pragma tells the compiler that the PL/SQL unit is a user defined function that is used primarily in SQL statements, which might improve its performance.
+
+As of Oracle Database 12c, there is also the possibility of adding a PL/SQL function to your SQL statement with the ```WITH``` clause. 
+A non-trivial example is described on Databaseline, from which it follows that the WITH clause is marginally faster than the UDF pragma, 
+but that the latter has the advantage that it is modular, whereas the former is the equivalent of hard coding your functions.
+
+We can therefore recommend that you first try to add ```PRAGMA UDF``` to your PL/SQL functions if and only if they are called from SQL statements but not PL/SQL code. 
+If that does not provide a significant benefit, then try the WITH function block.
 
 ## UTL_CALL_STACK pacakge
 
@@ -96,6 +106,23 @@ PLS-00904: insufficient privilege to access object PRIVATE_PROC
 ## mark elemets for depracation
 
 ## plsql scope
+
+## Generating a Default Value from a SEQUENCE
+Referencing a sequence as a column default value in a create table statement. New with database 12c.
+create table db_12c_style_identity 
+(  
+id               integer  DEFAULT ON NULL db_id_test_seq.nextval primary key, 
+another_column   varchar2(30) 
+)
+
+## fetch first X rows only
+now we you can limit your SQL query result sets to a specified number of rows.
+ “fetch first N” turns into a hidden row_number() over() analytic function - so use “fetch first N rows” instead of “where rownum <= N” 
+
+
+select * from hr.employees order by last_name fetch first 4 rows only
+
+
 
 ## oracle record contractors (Qualified Expressions)
 https://livesql.oracle.com/apex/livesql/file/content_F9WWD55FZB0LPDH74V0NVBSHU.html
