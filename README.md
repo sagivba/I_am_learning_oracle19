@@ -11,9 +11,9 @@ but please keep them sort as possible.
 
 
 # ACCESSIBLE BY Clause
-[oracle doc](http://docs.oracle.com/database/122/LNPLS/ACCESSIBLE-BY-clause.htm)
-[oracle-base](https://oracle-base.com/articles/12c/plsql-white-lists-using-the-accessible-by-clause-12cr1)
-[livesql](https://livesql.oracle.com/apex/livesql/file/content_EF5CJBRFPTA5PLU85RB6FS2FC.html)
+* [oracle doc](http://docs.oracle.com/database/122/LNPLS/ACCESSIBLE-BY-clause.htm)
+* [oracle-base](https://oracle-base.com/articles/12c/plsql-white-lists-using-the-accessible-by-clause-12cr1)
+* [livesql](https://livesql.oracle.com/apex/livesql/file/content_EF5CJBRFPTA5PLU85RB6FS2FC.html)
 
 
 The ACCESSIBLE BY clause restricts access to units and subprograms by other units.
@@ -95,7 +95,8 @@ PLS-00904: insufficient privilege to access object PRIVATE_PROC
 
 # optiomizing function
 ## UDF pragma 
-https://mwidlake.wordpress.com/2015/11/04/pragma-udf-speeding-up-your-plsql-functions-called-from-sql/
+* [mwidlake](https://mwidlake.wordpress.com/2015/11/04/pragma-udf-speeding-up-your-plsql-functions-called-from-sql/)
+* 
 The UDF pragma tells the compiler that the PL/SQL unit is a user defined function that is used primarily in SQL statements, which might improve its performance.
 
 As of Oracle Database 12c, there is also the possibility of adding a PL/SQL function to your SQL statement with the ```WITH``` clause. 
@@ -110,6 +111,7 @@ One thing to keep in mind: the performance of the UDF-ied function could actuall
 ## PRAGMA UDF and WITH clause enhancements
 
 [oracle-base](https://oracle-base.com/articles/12c/with-clause-enhancements-12cr1)
+
 In a number of presentations prior to the official 12c release, 
 speakers mentioned PRAGMA UDF (User Defined Function), 
 which supposedly gives you the performance advantages of inline PL/SQL, 
@@ -155,7 +157,9 @@ Returns the error message / stack, and will not truncate your string like SQLERR
 * MS_UTILITY.FORMAT_ERROR_BACKTRACE - On what line was the error raised
 
 ## UTL_CALL_STACK API 
-https://livesql.oracle.com/apex/livesql/file/content_CTG44K8HGN960Z0TRIEUVXEQI.html
+
+[livesql](https://livesql.oracle.com/apex/livesql/file/content_CTG44K8HGN960Z0TRIEUVXEQI.html)
+
 Added in Oracle Database 12c, the UTL_CALL_STACK package offers a comprehensive API into the execution call stack, the error stack and the error backtrace. 
 
 ```sql
@@ -234,7 +238,8 @@ PKG1.PROC1.NESTED_IN_PROC1
 # priveilages for progam units
 
 # mark elemets for depracation
-[source](http://stevenfeuersteinonplsql.blogspot.com/2016/10/122-helps-you-manage-persistent-code.html)
+[stevenfeuersteinonplsql blogspot](http://stevenfeuersteinonplsql.blogspot.com/2016/10/122-helps-you-manage-persistent-code.html)
+
 We can now use the DEPRECATE pragma to document that a program unit (e.g., package) or subprogram (e.g., procedure in a package) is deprecated and should not be used. 
 We can then take advantage of compile-time warnings to help identify all places that deprecated code is used.
 
@@ -334,8 +339,8 @@ SELECT * FROM hr.employees ORDER BY last_name FETCH FIRST 4 ROWS ONLY;
 
 
 # oracle record contractors (Qualified Expressions)
-[livesql-1] https://livesql.oracle.com/apex/livesql/file/content_F9WWD55FZB0LPDH74V0NVBSHU.html
-[livesql-2(]https://livesql.oracle.com/apex/livesql/file/content_GAE2LUPS0UA1IU1SUIAZCB7W1.html)
+* [livesql-1](https://livesql.oracle.com/apex/livesql/file/content_F9WWD55FZB0LPDH74V0NVBSHU.html)
+* [livesql-2](]https://livesql.oracle.com/apex/livesql/file/content_GAE2LUPS0UA1IU1SUIAZCB7W1.html)
 
 Starting with Oracle Database Release 18c, any PL/SQL value can be provided by an expression (for example for a record or for an associative array) like a constructor provides an abstract datatype value. In PL/SQL, we use the terms "qualified expression" and "aggregate" rather than the SQL term "type constructor", but the functionality is the same. Qualified expressions improve program clarity and developer productivity by providing the ability to declare and define a complex value in a compact form where the value is needed. A qualified expression combines expression elements to create values of a RECORD type or associative array type. Qualified expressions use an explicit type indication to provide the type of the qualified item. This explicit indication is known as a typemark.
 
