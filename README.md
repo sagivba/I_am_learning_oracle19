@@ -1,8 +1,8 @@
 #  sources from the web:
-* oracle learning library - https://apexapps.oracle.com/pls/apex/f?p=44785:1:0
-* oracle.com/plsql
-* oracle livesql -https://livesql.oracle.com/
-* ask Tom - ask_tom.oracle
+* [oracle learning library](https://apexapps.oracle.com/pls/apex/f?p=44785:1:0)
+* [oracle.com/plsql](http://oracle.com/plsql)
+* [oracle livesql](https://livesql.oracle.com/)
+* [ask Tom](http://ask_tom.oracle)
 
 # Objects name lengh
 Moving from the 30 char limit to 128 limit!
@@ -11,15 +11,20 @@ but please keep them sort as possible.
 
 
 # ACCESSIBLE BY Clause
-Doc: http://docs.oracle.com/database/122/LNPLS/ACCESSIBLE-BY-clause.htm
-https://oracle-base.com/articles/12c/plsql-white-lists-using-the-accessible-by-clause-12cr1
-https://livesql.oracle.com/apex/livesql/file/content_EF5CJBRFPTA5PLU85RB6FS2FC.html
+[oracle doc](http://docs.oracle.com/database/122/LNPLS/ACCESSIBLE-BY-clause.htm)
+[oracle-base](https://oracle-base.com/articles/12c/plsql-white-lists-using-the-accessible-by-clause-12cr1)
+[livesql](https://livesql.oracle.com/apex/livesql/file/content_EF5CJBRFPTA5PLU85RB6FS2FC.html)
 
 
-The ACCESSIBLE BY clause restricts access to units and subprograms by other units. The accessor list, also known as the white list, explicitly lists those units which may have access. In 12.2, this feature was enhanced to be applied to subprograms in packages. You can also specify the type or "unit kind" to which the whitelist applies. This is useful when you have triggers and PL/SQL program units of the same name. 
+The ACCESSIBLE BY clause restricts access to units and subprograms by other units.
+The accessor list, also known as the white list, explicitly lists those units which may have access. 
+In 12.2, this feature was enhanced to be applied to subprograms in packages.
+You can also specify the type or "unit kind" to which the whitelist applies. 
+This is useful when you have triggers and PL/SQL program units of the same name. 
 
 ## Apply ACCESSIBLE BY To Subprograms and Specify "Unit Kind"
 *the ACCESSIBLE BY clauses in the package specification must be repeated in the body.*
+
 ```sql
 CREATE OR REPLACE PACKAGE protected_pkg 
 IS 
@@ -103,8 +108,13 @@ If that does not provide a significant benefit, then try the WITH function block
 One thing to keep in mind: the performance of the UDF-ied function could actually degrade a bit when run natively in PL/SQL (outside of a SQL statement).
 
 ## PRAGMA UDF and WITH clause enhancements
-https://oracle-base.com/articles/12c/with-clause-enhancements-12cr1
-In a number of presentations prior to the official 12c release, speakers mentioned PRAGMA UDF (User Defined Function), which supposedly gives you the performance advantages of inline PL/SQL, whilst allowing you to define the PL/SQL object outside the SQL statement. The following code redefines the previous normal function to use this pragma.
+
+[oracle-base](https://oracle-base.com/articles/12c/with-clause-enhancements-12cr1)
+In a number of presentations prior to the official 12c release, 
+speakers mentioned PRAGMA UDF (User Defined Function), 
+which supposedly gives you the performance advantages of inline PL/SQL, 
+while allowing you to define the PL/SQL object outside the SQL statement. 
+The following code redefines the previous normal function to use this pragma.
 
 ```sql
 WITH 
@@ -161,17 +171,13 @@ IS
       PROCEDURE nested_in_proc1  
       IS  
       BEGIN  
-         DBMS_OUTPUT.put_line ( 
-            '*** "Traditional" Call Stack using FORMAT_CALL_STACK'); 
- 
-         DBMS_OUTPUT.put_line (DBMS_UTILITY.format_call_stack); 
+        DBMS_OUTPUT.put_line ('*** "Traditional" Call Stack using FORMAT_CALL_STACK'); 
+        DBMS_OUTPUT.put_line (DBMS_UTILITY.format_call_stack); 
   
-         DBMS_OUTPUT.put_line ( 
-            '*** Fully Qualified Nested Subprogram vis UTL_CALL_STACK');  
- 
-         DBMS_OUTPUT.put_line (  
-            utl_call_stack.concatenate_subprogram (  
-               utl_call_stack.subprogram (1)));  
+        DBMS_OUTPUT.put_line ('*** Fully Qualified Nested Subprogram vis UTL_CALL_STACK');  
+        DBMS_OUTPUT.put_line (  
+           utl_call_stack.concatenate_subprogram (  
+              utl_call_stack.subprogram (1)));  
       END;  
    BEGIN  
       nested_in_proc1;  
@@ -228,7 +234,7 @@ PKG1.PROC1.NESTED_IN_PROC1
 # priveilages for progam units
 
 # mark elemets for depracation
-http://stevenfeuersteinonplsql.blogspot.com/2016/10/122-helps-you-manage-persistent-code.html
+[source](http://stevenfeuersteinonplsql.blogspot.com/2016/10/122-helps-you-manage-persistent-code.html)
 We can now use the DEPRECATE pragma to document that a program unit (e.g., package) or subprogram (e.g., procedure in a package) is deprecated and should not be used. 
 We can then take advantage of compile-time warnings to help identify all places that deprecated code is used.
 
@@ -239,7 +245,6 @@ ALTER SESSION SET plsql_warnings = 'enable:all'
 /
 
 CREATE OR REPLACE PACKAGE pkg 
-   AUTHID DEFINER 
 AS 
    PRAGMA DEPRECATE(pkg); 
  
@@ -329,8 +334,8 @@ SELECT * FROM hr.employees ORDER BY last_name FETCH FIRST 4 ROWS ONLY;
 
 
 # oracle record contractors (Qualified Expressions)
-https://livesql.oracle.com/apex/livesql/file/content_F9WWD55FZB0LPDH74V0NVBSHU.html
-https://livesql.oracle.com/apex/livesql/file/content_GAE2LUPS0UA1IU1SUIAZCB7W1.html
+[livesql-1] https://livesql.oracle.com/apex/livesql/file/content_F9WWD55FZB0LPDH74V0NVBSHU.html
+[livesql-2(]https://livesql.oracle.com/apex/livesql/file/content_GAE2LUPS0UA1IU1SUIAZCB7W1.html)
 
 Starting with Oracle Database Release 18c, any PL/SQL value can be provided by an expression (for example for a record or for an associative array) like a constructor provides an abstract datatype value. In PL/SQL, we use the terms "qualified expression" and "aggregate" rather than the SQL term "type constructor", but the functionality is the same. Qualified expressions improve program clarity and developer productivity by providing the ability to declare and define a complex value in a compact form where the value is needed. A qualified expression combines expression elements to create values of a RECORD type or associative array type. Qualified expressions use an explicit type indication to provide the type of the qualified item. This explicit indication is known as a typemark.
 
@@ -460,8 +465,8 @@ END;
 
 
 # static expressions
-https://livesql.oracle.com/apex/livesql/file/content_EDX8UZPUE3RO12C4ETRA88I8X.html
-Doc: http://docs.oracle.com/database/122/LNPLS/plsql-language-fundamentals.htm#LNPLS300
+[livesql](https://livesql.oracle.com/apex/livesql/file/content_EDX8UZPUE3RO12C4ETRA88I8X.html)
+[oracle doc](http://docs.oracle.com/database/122/LNPLS/plsql-language-fundamentals.htm#LNPLS300)
 we can now use static expressions where previously only literal constants were allowed. 
 This will help us write code that adapts more easily and automatically to changes and is easier to maintain.
 
@@ -495,7 +500,7 @@ Invoker rights has a number of issues.
 ode based access control (CBAC), allowing roles to be granted directly to definer and invoker rights program units, thereby letting you to guarantee the level of privilege present in the calling user, without having to expose additional objects directly to that user. 
 
 # SQL/JSON Features in Database 12.2
-https://livesql.oracle.com/apex/livesql/file/tutorial_EDVE861H6UF4Z20EV0RM4DK2G.html
+[livesql](https://livesql.oracle.com/apex/livesql/file/tutorial_EDVE861H6UF4Z20EV0RM4DK2G.html)
 
 ## CLOB CHECK (PO_DOCUMENT IS JSON)
 Let's create table:
