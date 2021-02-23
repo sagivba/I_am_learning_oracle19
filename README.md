@@ -328,15 +328,17 @@ another_column   VARCHAR2(30)
 ```
 
 # fetch first X rows only
-now we you can limit your SQL query result sets to a specified number of rows.
+Now we you can limit your SQL query result sets to a specified number of rows.
  “fetch first N” turns into a hidden row_number() over() analytic function - so use “fetch first N rows” instead of “where rownum <= N” 
-
-
 ```sql
-SELECT * FROM hr.employees ORDER BY last_name FETCH FIRST 4 ROWS ONLY;
-
+SELECT * FROM hr.employees ORDER BY salary FETCH FIRST 4 ROWS ONLY;
 ```
-
+The following illustrates the syntax of the row limiting clause:
+```
+[ OFFSET offset ROWS]
+ FETCH  NEXT [  row_count | percent PERCENT  ] ROWS  [ ONLY | WITH TIES ] 
+```
+[Here are some good examples](https://www.oracletutorial.com/oracle-basics/oracle-fetch/)
 
 # oracle record contractors (Qualified Expressions)
 * [livesql-1](https://livesql.oracle.com/apex/livesql/file/content_F9WWD55FZB0LPDH74V0NVBSHU.html)
