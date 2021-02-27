@@ -9,9 +9,9 @@ The error stack will be truncated at 512 bytes, and you might lose some error in
 
 ## DBMS_UTILITY
 Returns the error message / stack, and will not truncate your string like SQLERRM will.
-* DBMS_UTILITY.FORMAT_CALL_STACK - How did I get here
-* DBMS_UTILITY.FORMAT_ERROR_STACK - what is error message / stack - this one will not truncate your string like SQLERRM will.
-* MS_UTILITY.FORMAT_ERROR_BACKTRACE - On what line was the error raised
+* `DBMS_UTILITY.FORMAT_CALL_STACK` - How did I get here
+* `DBMS_UTILITY.FORMAT_ERROR_STACK` - what is error message / stack - this one will not truncate your string like SQLERRM will.
+* `MS_UTILITY.FORMAT_ERROR_BACKTRACE` - On what line was the error raised
 
 ## UTL_CALL_STACK API 
 
