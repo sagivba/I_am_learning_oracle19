@@ -2,8 +2,19 @@
 * [livesql-1](https://livesql.oracle.com/apex/livesql/file/content_F9WWD55FZB0LPDH74V0NVBSHU.html)
 * [livesql-2](]https://livesql.oracle.com/apex/livesql/file/content_GAE2LUPS0UA1IU1SUIAZCB7W1.html)
 
-Starting with Oracle Database Release 18c, any PL/SQL value can be provided by an expression (for example for a record or for an associative array) like a constructor provides an abstract datatype value. In PL/SQL, we use the terms "qualified expression" and "aggregate" rather than the SQL term "type constructor", but the functionality is the same. Qualified expressions improve program clarity and developer productivity by providing the ability to declare and define a complex value in a compact form where the value is needed. A qualified expression combines expression elements to create values of a RECORD type or associative array type. Qualified expressions use an explicit type indication to provide the type of the qualified item. This explicit indication is known as a typemark.
+Starting with Oracle Database Release 18c, any PL/SQL value can be provided by an expression 
+(for example for a record or for an associative array) like a constructor provides an abstract datatype value. 
 
+In PL/SQL, we use the terms "qualified expression" and "aggregate" rather than the SQL term "type constructor", 
+but the functionality is the same. 
+
+Qualified expressions improve program clarity and developer productivity.
+They are  providing *the ability to declare and define a complex value in a compact form* where the value is needed. 
+A qualified expression combines expression elements to create values of a RECORD type or associative array type. 
+Qualified expressions use an explicit type indication to provide the type of the qualified item. 
+This explicit indication is known as a *typemark*.
+
+## Simple example
 ```sql
 DECLARE 
    TYPE species_rt IS RECORD 
@@ -33,8 +44,11 @@ END;
 
 Now we  can "call a function" (qualified expression - like OOP contractor ) with the same name as your record type and pass values for our fields inside it. 
 This example uses positional notation to associate values with fields. 
+
 Notice also that I use the qualified expression as a default value for my parameter!
+
 ## Qualified Expressions for Associative Arrays
+
 Any PL/SQL value can be provided by an expression (for example for a *record* or for an *associative array*) like a constructor provides an abstract datatype value. 
 In PL/SQL, ORACLE are using the terms "qualified expression" and "aggregate" rather than the SQL term "type constructor" (and I don not aunderstand why...).
 The functionality is the same. 
@@ -79,7 +93,7 @@ BEGIN
 END;
 ```
 
-##### using the species_rt above:
+##### using the `species_rt` above:
 
 ```sql
 DECLARE
