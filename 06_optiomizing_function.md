@@ -1,4 +1,4 @@
-# optiomizing function
+# Optiomizing function
 ## UDF pragma 
 * [mwidlake](https://mwidlake.wordpress.com/2015/11/04/pragma-udf-speeding-up-your-plsql-functions-called-from-sql/)
 
