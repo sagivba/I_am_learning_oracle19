@@ -75,7 +75,6 @@ Line: 5 PLS-00904: insufficient privilege to access object THIS_FOR_TRIGGER_ONLY
 ```sql
 exec protected_pkg.this_for_proc_only
 ```
-ORA-06550: line 1, column 7:
-PLS-00904: insufficient privilege to access object PRIVATE_PROC 
+*ORA-06550*: line 1, column 7:PLS-00904: insufficient privilege to access object PRIVATE_PROC 
 
 
