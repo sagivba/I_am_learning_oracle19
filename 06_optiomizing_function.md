@@ -12,7 +12,7 @@ but that the latter has the advantage that it is modular, whereas the former is 
 if and only if they are called from SQL statements but not PL/SQL code,
 Oracle recommends that you first try to add ```PRAGMA UDF``` to your PL/SQL functions.
  
-*If that does not provide a significant benefit, then try the WITH function block.*
+*If that does not provide a significant benefit, then try the ```WITH function block```.*
 
 One thing to keep in mind: the performance of the UDF-ied function could actually degrade a bit when run natively in PL/SQL (outside of a SQL statement).
 
