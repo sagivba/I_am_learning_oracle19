@@ -1,6 +1,6 @@
 # oracle record contractors (Qualified Expressions)
 * [livesql-1](https://livesql.oracle.com/apex/livesql/file/content_F9WWD55FZB0LPDH74V0NVBSHU.html)
-* [livesql-2](]https://livesql.oracle.com/apex/livesql/file/content_GAE2LUPS0UA1IU1SUIAZCB7W1.html)
+* [livesql-2](https://livesql.oracle.com/apex/livesql/file/content_GAE2LUPS0UA1IU1SUIAZCB7W1.html)
 
 Starting with Oracle Database Release 18c, any PL/SQL value can be provided by an expression 
 (for example for a record or for an associative array) like a constructor provides an abstract datatype value. 
