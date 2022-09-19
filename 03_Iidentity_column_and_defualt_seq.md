@@ -57,7 +57,7 @@ A GUID (*G*lobally *U*nique *I*dentifier) is a 128-bit text string that represen
 Creating a guid column can by very usful as alternative to PK.
 for example:
 ```sql
-CREATE TABLE db_12c_style_identity 
+CREATE TABLE db_12c_style_guid
 (  
 guid_column      RAW(16)         DEFAULT sys_guid() 
 another_column   VARCHAR2(30) 
