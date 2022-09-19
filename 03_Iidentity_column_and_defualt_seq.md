@@ -1,4 +1,4 @@
-# Iidentity column and_defuald_seqence_value
+# Iidentity column , GUID and defualt seqence value
 Here are two option to create PK
 
 ## Identity column
@@ -52,4 +52,14 @@ another_column   VARCHAR2(30)
 )
 ```
 
-
+## Generating a Default Value from a GUID
+A GUID (*G*lobally *U*nique *I*dentifier) is a 128-bit text string that represents an identification (ID).
+Creating a guid column can by very usful as alternative to PK.
+for example:
+```sql
+CREATE TABLE db_12c_style_identity 
+(  
+guid_column      RAW(16)         DEFAULT sys_guid() 
+another_column   VARCHAR2(30) 
+)
+```
