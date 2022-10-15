@@ -1,5 +1,5 @@
 # Iidentity column , GUID and defualt seqence value
-Here are two option to create PK
+Here are three option to create PK
 
 ## Identity column
 
