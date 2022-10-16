@@ -33,5 +33,18 @@ If performance is important, or if you need to store a floating-point number lar
 ### converting from number to BINARY_DOUBLE 
 The function TO_BINARY_DOUBLE returns a double-precision floating-point number.
 
+## PLS_INTEGER Data Type
+The PLS_INTEGER data type is only available to PL/SQL code. It works in a similar way to the NUMBER value in Oracle SQL.
+
+PLS_INTEGER is an integer data type, which means it can only store whole numbers. It’s signed, which means it can store positive and negative numbers.
+
+The range is from -2,147,483,647 to 2,147,483,647.
+
+If you’re using PL/SQL, you can use this data type. They perform better and require less storage than NUMBER data types.
+
+### When to use PLS_INTEGER
+If you’re using PL/SQL and you need to use integer values.
+Use PLS_INTEGER instead of BINARY_INTEGER which is older, and slower version of the PLS_INTEGER. 
+
 
 
